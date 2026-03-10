@@ -1,8 +1,8 @@
 # main.py
 
 import pygame as pg
-from .utilities import *
-from src.Databehandling.settings import *
+from utilities import Menu
+from settings import *
 
 class App:
     def __init__(self):
