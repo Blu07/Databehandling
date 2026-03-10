@@ -15,3 +15,5 @@ Windows + MacOS: `pip install -r requirements.txt`
 # Kjør Prosjekt: main.py
 Windows: `py src/Databehandling/main.py` \
 MacOS: `python3 src/Databehandling/main.py`
+
+> NB: Trykk på `Fjern blokkering` om det kommer en pop-up som sier at det ikke er tillatt å kjøre programkode.
