@@ -1,6 +1,9 @@
 # main.py
 
+import sys
+
 import pygame as pg
+from Databehandling.utilities.utils import PlotOverview
 from utilities import Menu
 from settings import *
 
@@ -10,13 +13,27 @@ class App:
         pg.display.set_caption('Tittel')
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.clock = pg.time.Clock()
-        self.state = Menu()
+        self.current_state = Menu()
 
     def run(self):
         while True:
-            self.events = pg.event.get()
-            self.state.handle_events(self.events)
-            self.state.draw(self.screen)
+            current_state = self.current_state
+            
+            events = pg.event.get()
+            navigation, metadata = current_state.handle_events(events)
+            
+            self.current_state = current_state
+            
+            if navigation == "start_spill":
+                current_state = GameState()
+            
+            
+            if navigation == "quit":
+                pg.quit()
+                sys.exit()
+            
+            
+            current_state.draw(self.screen)
             pg.display.flip()
             self.clock.tick(FPS)
 
