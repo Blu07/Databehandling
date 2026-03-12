@@ -95,7 +95,7 @@ def returnSoner(path):
     # print(arr)
     return arr
     
-# returnSoner("leieMonde.json")
+# returnSoner("data/leieMonde.json")
 
 
 

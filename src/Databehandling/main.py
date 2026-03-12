@@ -3,6 +3,8 @@
 import pygame as pg
 from utilities import Menu
 from settings import *
+from utilities import fetchData
+from pathlib  import Path
 
 class App:
     def __init__(self):
@@ -13,6 +15,8 @@ class App:
         self.state = Menu()
 
     def run(self):
+       # test   // Krever path fra oppen folder
+        print(fetchData.returnAar("src/Databehandling/data/leieMonde.json"))
         while True:
             self.events = pg.event.get()
             self.state.handle_events(self.events)
