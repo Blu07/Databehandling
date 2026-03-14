@@ -1,6 +1,7 @@
 from .Button import Button, ButtonFunk
-from .Drawtext import Text
-from .inputbox import Inputbox
+from .DrawText import Text
 from .fetchData import returnAar ,returnData, returnSoner
+from .inputbox import Inputbox
+from .slider import Slider
 
-__all__ = ["Button", "Text", "Inputbox", "ButtonFunk", "returnAar", "returnData", "returnSoner"]
+__all__ = ["Button", "Text", "Inputbox", "ButtonFunk", "returnAar", "returnData", "returnSoner", "Slider"]

@@ -37,9 +37,9 @@ def returnData(path):
                 data_i+=1
         ney.append(info)      
 
-    for i in ney:
-        print("")
-        print(i)
+    # for i in ney:
+    #     print("")
+    #     print(i)
     return ney
 
 

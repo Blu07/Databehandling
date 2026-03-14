@@ -4,6 +4,7 @@ import pygame as pg
 from states import Menu
 from settings import *
 
+
 class App:
     def __init__(self):
         pg.init()

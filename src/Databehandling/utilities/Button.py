@@ -6,7 +6,7 @@ pygame.font.init()
 
 
 class Button:
-    def __init__(self,pos,text="none",textCooler=(0,0,0), fontSize = 11, font="Arial" , buttonsize=(100, 100), buttonCooler = (0, 0, 0), returnValue=True, toggle=True):
+    def __init__(self,pos,text="none",textCooler=(0,0,0), fontSize = 11, font="Arial" , buttonsize=(100, 100), buttonCooler = (0, 0, 0), returnValue=True, toggle=True, active=True):
         """_summary_
             for å lagge en knap som returner
         Args:
@@ -26,6 +26,7 @@ class Button:
         self.fontSize = fontSize
         self.font = pygame.font.SysFont(font, fontSize)
         self.toggle = toggle
+        self.active = active
 
         self.buttonsize = buttonsize
         
@@ -64,9 +65,11 @@ class Button:
         rect = self.rect()
         if rect.collidepoint(pos):
             # return True
-            if self.toggle and self.buttonColer == colors["Blue"]:
+            if self.toggle and self.active:
+                self.active = False
                 self.buttonColer = colors["Red"]
             elif self.toggle:
+                self.active = True
                 self.buttonColer = colors["Blue"]
 
             return self.returnValue
