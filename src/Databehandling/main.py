@@ -14,7 +14,6 @@ class App:
         self.state = Menu()
 
     def run(self):
-       # test   // Krever path fra oppen folders
         while True:
             self.events = pg.event.get()
             self.state.handle_events(self.events)
