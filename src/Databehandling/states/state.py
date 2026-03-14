@@ -4,11 +4,13 @@ import pygame as pg
 import sys
 import threading
 import matplotlib.pyplot as plt
-from utilities import Button, returnData, returnAar
+from utilities import Button, returnData, returnAar,returnAntRom, returnSoner
 from settings import colors
 from utilities import Slider
 import matplotlib.pyplot as plt
 from plot.linje import plotLinje
+
+import multiprocessing
 
 class Menu():
     """ Menu
@@ -20,6 +22,7 @@ class Menu():
         self.grid = True
 
         self.showRom = False
+        self.showSoner = False
 
         self.dataPath = "data/leieMonde.json"
 
@@ -28,25 +31,16 @@ class Menu():
             Button((100, 175), "Legend", colors["Black"], 24, None, (110, 110), colors["Blue"], "legend", True),
             Button((100, 300), "Gjennomsnitt", colors["Black"], 24, None, (110, 110), colors["Blue"], "average", True),
             Button((100, 425), "Grid", colors["Black"], 24, None, (110, 110), colors["Blue"], "grid", True),
-            Button((300, 50), "Antal Rom", colors["Black"], 24, None, (110, 110), colors["Blue"], "rom", True),
+            Button((300, 50), "Antal Rom", colors["Black"], 24, None, (110, 110), colors["Red"], "rom", True, False),
+            Button((300, 175), "Soner", colors["Black"], 24, None, (110, 110), colors["Red"], "soner", True, False),
             Button((650, 425), "Plott", colors["Black"], 24, None, (250, 110), colors["Green"], "plot", False)
         ]
-        self.buttonsRoms=[]
-        anttalKnappIx = 500//110
-        anttalKnappIy = 300//110
-        x = 0
-        y = 0
-        for rom in range(5):
 
-            if x!=0 and anttalKnappIx%rom:
-                y+=1
-                x=0
+        self.buttonsRoms= self.Selctor((500,50),(500,300),(110,110), returnAntRom(self.dataPath))
+        self.buttonsSoner= self.Selctor((500,50),(500,300),(110,110), returnSoner(self.dataPath))
 
-            button = Button(((120*x+500,120*y+50)), "Rom "+ str(rom+1), colors["Black"], 24, None, (110,110), colors["Blue"], True, True ,False)
-            self.buttonsRoms.append(button)
-            x+=1
 
-        self.slider = Slider(300, 20, 300, 400, colors["Red"], returnAar(self.dataPath))
+        self.slider = Slider(300, 20, 300, 450, colors["Red"], returnAar(self.dataPath))
 
     def handle_events(self, events):
         for event in events:
@@ -57,6 +51,9 @@ class Menu():
             if event.type == pg.MOUSEBUTTONDOWN:
                 if self.showRom:
                     for button in self.buttonsRoms:
+                        button.click(pg.mouse.get_pos())
+                elif self.showSoner:
+                    for button in self.buttonsSoner:
                         button.click(pg.mouse.get_pos())
 
                 for button in self.buttons:
@@ -75,29 +72,70 @@ class Menu():
                             print(self.grid)
                         elif button.returnValue == "rom":
                             self.showRom = not self.showRom
+                        elif button.returnValue == "soner":
+                            self.showSoner = not self.showSoner
                         elif button.returnValue == "plot":
                             self.plot(self.axis_title, self.legend, self.average, self.grid)
         self.slider.drag_slider()
     
     def draw(self, screen):
         screen.fill((200, 200, 200))
-        pg.draw.rect(screen,colors["Red"],(500,50,500,300))
+        # pg.draw.rect(screen,colors["Red"],(500,50,500,300)) # viser hvor knapper kommer
         for button in self.buttons:
             button.draw(screen)
 
         if self.showRom:
             for Button in self.buttonsRoms:
                 Button.draw(screen) 
+        elif self.showSoner:
+            for Button in self.buttonsSoner:
+                Button.draw(screen) 
+
 
         self.slider.draw(screen)
         
 
-    def Selctor(self,screen):
-        pass
+    def Selctor(self,boxPos,boxSize, buttnSize, elements):
+        anttalKnappIx = boxSize[0]//buttnSize[0]
+        anttalKnappIy = boxSize[1]//buttnSize[1]
+        x = 0
+        y = 0
+        i = 0
+        arr = []
+        for elemwnt in elements:
+
+            if x!=0 and anttalKnappIx%x:
+                y+=1
+                x=0
+
+            button = Button(((120*x+boxPos[0],120*y+boxPos[1])), str(elemwnt), colors["Black"], 24, None, (110,110), colors["Red"],i , True ,False)
+            arr.append(button)
+            x+=1
+            i+=1
+        return arr
+            
 
     def plot(self, axis_title, legend, average, grid):
-        t = threading.Thread(target=plotLinje,name="ploting",args=((returnData(self.dataPath)[0],returnAar(self.dataPath))))
-        t.daemon = True # Gjøre at den nye treaden vil avslutte når hoved treaden avsluter
-        t.start()
-        # plotLinje(returnData(self.dataPath),returnAar(self.dataPath))
+
+        data = returnData(self.dataPath)
+        plotData = []
+
+        for buttonRom in self.buttonsRoms:
+            if buttonRom.active:
+                temp = []
+                for buttonSoner in self.buttonsSoner:
+                    if buttonSoner.active:
+                        temp.append(data[buttonRom.returnValue][buttonSoner.returnValue])
+                plotData.append(temp)
+        
+        # print(plotData)
+
+        p = multiprocessing.Process(target=plotLinje, args=(plotData,returnAar(self.dataPath)))
+        p.daemon = True
+        p.start()
+        # t = threading.Thread(target=plotLinje,name="ploting",args=((plotData,returnAar(self.dataPath))))
+        # t.daemon = True # Gjøre at den nye treaden vil avslutte når hoved treaden avsluter
+        # t.start()
+        
+
         # print("plotting graph", returnData(self.dataPath))
