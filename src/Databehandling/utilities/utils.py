@@ -1,17 +1,20 @@
 # utils.py
 
 import pygame as pg
-import sys
 
 class BaseState:
     def __init__(self):
         self.font = pg.font.SysFont('Arial', 46)
 
     def handle_events(self, events):
+        navigation = None
+        metadata = None
+        
         for event in events:
             if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
+                navigation = "quit"
+                
+        return navigation, metadata
 
     def draw(self, screen):
         screen.fill((0, 0, 0))
@@ -23,8 +26,12 @@ class Menu(BaseState):
         super().__init__()
 
     def handle_events(self, events):
-        super().handle_events(events)
-    
+        navigation, metadata = super().handle_events(events)
+        
+        # Handle menu-specific events here
+        
+        return navigation, metadata
+
     def draw(self, screen):
         super().draw(screen)
 
