@@ -51,8 +51,8 @@ class Menu():
             self.show_soner_button
         ]
 
-        self.buttonsRoms = self.Selctor((300,210),(500,300),(110,110), returnAntRom(self.dataPath))
-        self.buttonsSoner = self.Selctor((450,210),(500,300),(110,110), returnSoner(self.dataPath))
+        self.buttonsRoms = self.Selctor((300,210), (500,300), (110,110), 5, returnAntRom(self.dataPath))
+        self.buttonsSoner = self.Selctor((450,210), (500,300), (110,110), 5, returnSoner(self.dataPath))
 
 
         self.slider = Slider(300, 20, 600, 95, colors["Red"], returnAar(self.dataPath))
@@ -105,9 +105,9 @@ class Menu():
         self.slider.draw(screen)
         
 
-    def Selctor(self,boxPos,boxSize, buttnSize, elements):
+    def Selctor(self,boxPos,boxSize, buttnSize, padding, elements):
         anttalKnappIx = boxSize[0]//buttnSize[0]
-        anttalKnappIy = boxSize[1]//buttnSize[1]
+        anttalKnappIy = boxSize[1]//buttnSize[1] # kan brukes for finn ut om knappen tar for mye plass
         x = 0
         y = 0
         i = 0
@@ -118,7 +118,7 @@ class Menu():
                 y+=1
                 x=0
 
-            button = Button(((120*x+boxPos[0],120*y+boxPos[1])), str(elemwnt), colors["Black"], 24, None, (110,110), colors["Red"], i, True, True, self, False)
+            button = Button((((buttnSize[0]+padding)*x+boxPos[0],(buttnSize[1]+padding)*y+boxPos[1])), str(elemwnt), colors["Black"], 24, None, buttnSize, colors["Red"],i , True ,False)
             arr.append(button)
             x+=1
             i+=1
