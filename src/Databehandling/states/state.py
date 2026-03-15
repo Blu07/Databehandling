@@ -70,23 +70,16 @@ class Menu():
                 sys.exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.show_rom_button.active:
-                    for button in self.buttonsRoms:
-                        button.click(pygame.mouse.get_pos())
-                elif self.show_soner_button.active:
-                    for button in self.buttonsSoner:
-                        returnValue = button.click(pygame.mouse.get_pos())
-                        print(returnValue)
-                        if returnValue == "soner":
-                            
-                            self.show_rom_button.update(False)
-                            
-                        if returnValue == "rom":
-                            self.show_soner_button.update(False)
-                            
-
-                for button in self.buttons:
-                    button.click(pygame.mouse.get_pos())
+                for button in self.buttonsSoner:
+                    returnValue = button.click(pygame.mouse.get_pos())
+                    if returnValue == "soner":          
+                        print("soner ble trykket, setter rom til false")                  
+                        self.show_rom_button.update(False)
+                        print("satt rom til false")                  
+                        
+                    if returnValue == "rom":
+                        self.show_soner_button.update(False)
+                
                 
         self.slider.drag_slider()
         

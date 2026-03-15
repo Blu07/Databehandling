@@ -110,9 +110,13 @@ class Button:
         if not self.rect().collidepoint(pos):
             return False
         
+        print("Jeg ble trykket")
+        
+        
         # Ikke gjør toggle mekanikk
         if not self.toggle:
             return self.returnValue
+        
         
         # bytt state på knappen og deretter fargen som tilsvarer den nye staten
         self.active = not self.active
@@ -125,17 +129,16 @@ class Button:
             else:
                 print("Error: Det er ikke gitt en state referanse til knappen, så den kan ikke tegne plot")
 
+        print("knappen sier:", self.returnValue)
         
         return self.returnValue
 
     
     def update(self, set_active:bool):
-        if set_active:
-            self.active = True
-            self.buttonColer = colors["Blue"]
-        if set_active == False:
-            self.active = False
-            self.buttonColer = colors["Red"]
+        print("oppdaterer knappen til", set_active, "ny farge:", colors["Blue"] if set_active else colors["Red"])
+        self.active = set_active
+        self.buttonColer = colors["Blue"] if self.active else colors["Red"]
+        
 
 
 
