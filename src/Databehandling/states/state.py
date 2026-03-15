@@ -96,10 +96,10 @@ class Menu():
 
         if self.showRom:
             for button in self.buttonsRoms:
-                button.testDraw(screen) 
+                button.draw(screen) 
         elif self.showSoner:
             for button in self.buttonsSoner:
-                button.testDraw(screen) 
+                button.draw(screen) 
 
 
         self.slider.draw(screen)
