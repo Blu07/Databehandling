@@ -36,8 +36,8 @@ class Menu():
             Button((650, 425), "Plott", colors["Black"], 24, None, (250, 110), colors["Green"], "plot", False)
         ]
 
-        self.buttonsRoms= self.Selctor((500,50),(500,300),(110,110), returnAntRom(self.dataPath))
-        self.buttonsSoner= self.Selctor((500,50),(500,300),(110,110), returnSoner(self.dataPath))
+        self.buttonsRoms= self.Selctor((500,50),(500,300),(120,120),5,returnAntRom(self.dataPath))
+        self.buttonsSoner= self.Selctor((500,50),(500,300),(120,120),5, returnSoner(self.dataPath))
 
 
         self.slider = Slider(300, 20, 300, 450, colors["Red"], returnAar(self.dataPath))
@@ -72,11 +72,21 @@ class Menu():
                             print(self.grid)
                         elif button.returnValue == "rom":
                             self.showRom = not self.showRom
+                            self.showSoner = False
                         elif button.returnValue == "soner":
                             self.showSoner = not self.showSoner
+                            self.showRom = False
                         elif button.returnValue == "plot":
                             self.plot(self.axis_title, self.legend, self.average, self.grid)
         self.slider.drag_slider()
+        for button in self.buttons:
+            if button.returnValue == "rom":
+                button.update(self.showRom)
+            elif button.returnValue == "soner":
+                button.update(self.showSoner)
+                
+                
+
     
     def draw(self, screen):
         screen.fill((200, 200, 200))
@@ -85,19 +95,19 @@ class Menu():
             button.draw(screen)
 
         if self.showRom:
-            for Button in self.buttonsRoms:
-                Button.draw(screen) 
+            for button in self.buttonsRoms:
+                button.testDraw(screen) 
         elif self.showSoner:
-            for Button in self.buttonsSoner:
-                Button.draw(screen) 
+            for button in self.buttonsSoner:
+                button.testDraw(screen) 
 
 
         self.slider.draw(screen)
         
 
-    def Selctor(self,boxPos,boxSize, buttnSize, elements):
+    def Selctor(self,boxPos,boxSize, buttnSize, padding, elements):
         anttalKnappIx = boxSize[0]//buttnSize[0]
-        anttalKnappIy = boxSize[1]//buttnSize[1]
+        anttalKnappIy = boxSize[1]//buttnSize[1] # kan brukes for finn ut om knappen tar for mye plass
         x = 0
         y = 0
         i = 0
@@ -108,7 +118,7 @@ class Menu():
                 y+=1
                 x=0
 
-            button = Button(((120*x+boxPos[0],120*y+boxPos[1])), str(elemwnt), colors["Black"], 24, None, (110,110), colors["Red"],i , True ,False)
+            button = Button((((buttnSize[0]+padding)*x+boxPos[0],(buttnSize[1]+padding)*y+boxPos[1])), str(elemwnt), colors["Black"], 24, None, buttnSize, colors["Red"],i , True ,False)
             arr.append(button)
             x+=1
             i+=1

@@ -20,15 +20,60 @@ class Button:
             returnValue (bool, optional): hvilken verdi den returner. Defaults to True.
         """
         self.pos = list(pos)
-        
-        self.text = text
+        self.buttonsize = buttonsize
+
         self.textCooler = textCooler
         self.fontSize = fontSize
         self.font = pygame.font.SysFont(font, fontSize)
+
         self.toggle = toggle
         self.active = active
+        self.returnValue = returnValue # For å velge hvilken verdie som retunerer
+        
+        self.text = text
+        self.testText = list(text.split())
+        new = []
+        i = 0
+        while i  < (len(self.testText)):
+            try: 
+                # print(new[-1],"::" , self.testText[i])
+                int(new[-1][-1])
+                int(self.testText[i][0])
+                new.append(str(new[-1])+ " "+ str(self.testText[i]))
+                new.pop(-2)
+                i+=1
+            except:
+                new.append(self.testText[i])
+                i+=1
+        # new.append(self.testText[-1])
+        self.testText = new
+        print(self.testText)
+        arrTextSize = []
+        for tex in self.testText:
+            arrTextSize.append(self.font.size(tex))
+        print(arrTextSize)
 
-        self.buttonsize = buttonsize
+        new = [[self.testText[0]]]
+        x = 0
+        for i in range(len(arrTextSize)-1):
+            # print(new)
+            if self.font.size(new[x][0])[0] + arrTextSize[i+1][0] < self.buttonsize[0]-5:
+
+                    new[x].append(str(new[x][0])+ " "+ str(self.testText[i+1]))
+                    print(new[x])
+                    new[x].pop(-2)
+
+
+            else:
+                new.append([self.testText[i+1]])
+                x+=1
+        self.testText = []
+        for element in new:
+            self.testText.append(element[0])
+        print(self.testText)
+        
+
+
         
         # if buttonsize == True: 
         #     text_width, text_height = self.font.size(self.text)
@@ -39,11 +84,6 @@ class Button:
         self.buttonColer = buttonCooler
         
         
-
-        
-        self.returnValue = returnValue # For å velge hvilken verdie som retunerer
-        
-
     
     def rect(self):
         """_summary_
@@ -75,10 +115,15 @@ class Button:
             return self.returnValue
         return False
     
-    def update(self,offset):
-        # self.pos[0] += offset[0]
-        # self.pos[1] += offset[1]
-        # print(self.pos)
+    def update(self, asd):
+        if asd:
+            self.active = True
+            self.buttonColer = colors["Blue"]
+        if asd == False:
+            self.active = False
+            self.buttonColer = colors["Red"]
+
+        
         pass
 
 
@@ -98,6 +143,23 @@ class Button:
         center_x =  (self.buttonsize[0]-text_width)/2
         center_y =  (self.buttonsize[1]-text_height)/2
         button.blit(textimg,(center_x, center_y))
+        surface.blit(button,(self.pos[0] + offset[0], self.pos[1]+ offset[1]))
+
+    def testDraw(self,surface, offset=[0,0]):
+        button = pygame.Surface((self.buttonsize[0],self.buttonsize[1]), pygame.SRCALPHA, 32).convert_alpha()
+        button.fill(self.buttonColer)
+        textSize_y = 0
+        for text in self.testText:
+            textSize_y += self.font.size(text)[1]+1
+        y = (self.buttonsize[1]-textSize_y)/2
+        for text in self.testText:
+            textimg = self.font.render(text, True, self.textCooler)
+            
+            text_width, text_height = self.font.size(text)
+            # rect = self.rect()
+            center_x =  (self.buttonsize[0]-text_width)/2
+            button.blit(textimg,(center_x, y))
+            y +=  text_height
         surface.blit(button,(self.pos[0] + offset[0], self.pos[1]+ offset[1]))
 
 
