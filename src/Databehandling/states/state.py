@@ -75,7 +75,15 @@ class Menu():
                         button.click(pygame.mouse.get_pos())
                 elif self.show_soner_button.active:
                     for button in self.buttonsSoner:
-                        button.click(pygame.mouse.get_pos())
+                        returnValue = button.click(pygame.mouse.get_pos())
+                        print(returnValue)
+                        if returnValue == "soner":
+                            
+                            self.show_rom_button.update(False)
+                            
+                        if returnValue == "rom":
+                            self.show_soner_button.update(False)
+                            
 
                 for button in self.buttons:
                     button.click(pygame.mouse.get_pos())
@@ -96,8 +104,9 @@ class Menu():
 
         if self.show_rom_button.active:
             for Button in self.buttonsRoms:
-                Button.draw(screen) 
-        elif self.show_soner_button.active:
+                Button.draw(screen)
+                
+        if self.show_soner_button.active:
             for Button in self.buttonsSoner:
                 Button.draw(screen) 
 
@@ -118,7 +127,7 @@ class Menu():
                 y+=1
                 x=0
 
-            button = Button((((buttnSize[0]+padding)*x+boxPos[0],(buttnSize[1]+padding)*y+boxPos[1])), str(elemwnt), colors["Black"], 24, None, buttnSize, colors["Red"],i , True ,False)
+            button = Button((((buttnSize[0]+padding)*x+boxPos[0],(buttnSize[1]+padding)*y+boxPos[1])), str(elemwnt), colors["Black"], 24, None, buttnSize, colors["Red"], i, True, True, self, False)
             arr.append(button)
             x+=1
             i+=1

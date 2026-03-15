@@ -104,33 +104,36 @@ class Button:
         Returns:
             _type_: retuner ennten en retuner verdi eller True når knappen blir trykt
         """
-        rect = self.rect()
-        if rect.collidepoint(pos):
-            
-            # return True
-            if self.toggle and self.active:
-                self.active = False
-                self.buttonColer = colors["Red"]
-            elif self.toggle:
-                self.active = True
-                self.buttonColer = colors["Blue"]
-            
-            if self.draw_plot_on_toggle:
-                if self.state_ref != None:
-                    self.state_ref.create_plot()
-                else:
-                    print("Error: Det er ikke gitt en state referanse til knappen, så den kan ikke tegne plot")
+        
+        print("Hei")
 
-            print("Toggeled", self.returnValue)
-            
+        if not self.rect().collidepoint(pos):
+            return False
+        
+        # Ikke gjør toggle mekanikk
+        if not self.toggle:
             return self.returnValue
-        return False
+        
+        # bytt state på knappen og deretter fargen som tilsvarer den nye staten
+        self.active = not self.active
+        self.buttonColer = colors["Blue"] if self.active else colors["Red"]
+
+        # Tegn plott med den nye staten hvis den er satt til det
+        if self.draw_plot_on_toggle:
+            if self.state_ref is not None:
+                self.state_ref.create_plot()
+            else:
+                print("Error: Det er ikke gitt en state referanse til knappen, så den kan ikke tegne plot")
+
+        
+        return self.returnValue
+
     
-    def update(self, asd):
-        if asd:
+    def update(self, set_active:bool):
+        if set_active:
             self.active = True
             self.buttonColer = colors["Blue"]
-        if asd == False:
+        if set_active == False:
             self.active = False
             self.buttonColer = colors["Red"]
 
