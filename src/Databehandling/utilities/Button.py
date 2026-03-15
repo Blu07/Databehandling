@@ -1,11 +1,12 @@
 import pygame
+from settings import colors
 
 
 pygame.font.init()
 
 
 class Button:
-    def __init__(self,pos,text="none",textCooler=(0,0,0), fontSize = 11, font="Arial" , buttonsize=True, buttonCooler =(255,255,255) , returnValue=True):
+    def __init__(self,pos,text="none",textCooler=(0,0,0), fontSize = 11, font="Arial" , buttonsize=(100, 100), buttonCooler = (0, 0, 0), returnValue=True, toggle=True, active=True):
         """_summary_
             for å lagge en knap som returner
         Args:
@@ -14,7 +15,7 @@ class Button:
             textCooler (tuple, optional): farge po teksten. Defaults to (0,0,0).
             fontSize (int, optional): storelse po teksten. Defaults to 11.
             font (str, optional): hvilken type font po texten. Defaults to "Arial".
-            buttonsize (bool, optional): dimisionen po kanppen. Defaults to True.
+            buttonsize (tuple, optional): dimisionen po kanppen. Defaults to 100x100 px.
             buttonCooler (tuple, optional): farge po knapen. Defaults to (255,255,255).
             returnValue (bool, optional): hvilken verdi den returner. Defaults to True.
         """
@@ -24,12 +25,16 @@ class Button:
         self.textCooler = textCooler
         self.fontSize = fontSize
         self.font = pygame.font.SysFont(font, fontSize)
+        self.toggle = toggle
+        self.active = active
+
+        self.buttonsize = buttonsize
         
-        if buttonsize == True: 
-            text_width, text_height = self.font.size(self.text)
-            self.buttonsize = [round(text_width,-1)+50,round(text_height,-1)+10]
-        else:
-            self.buttonsize = list(buttonsize)
+        # if buttonsize == True: 
+        #     text_width, text_height = self.font.size(self.text)
+        #     self.buttonsize = [round(text_width,-1)+50,round(text_height,-1)+10]
+        # else:
+        #     self.buttonsize = list(buttonsize)
         # print(self.buttonsize)
         self.buttonColer = buttonCooler
         
@@ -60,6 +65,13 @@ class Button:
         rect = self.rect()
         if rect.collidepoint(pos):
             # return True
+            if self.toggle and self.active:
+                self.active = False
+                self.buttonColer = colors["Red"]
+            elif self.toggle:
+                self.active = True
+                self.buttonColer = colors["Blue"]
+
             return self.returnValue
         return False
     

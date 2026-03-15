@@ -1,13 +1,14 @@
 # main.py
 
 import pygame as pg
-from utilities import Menu
+from states import Menu
 from settings import *
+
 
 class App:
     def __init__(self):
         pg.init()
-        pg.display.set_caption('Tittel')
+        pg.display.set_caption('Databehandling')
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.clock = pg.time.Clock()
         self.state = Menu()
