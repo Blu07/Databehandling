@@ -108,6 +108,9 @@ class Button:
         print("Hei")
 
         if not self.rect().collidepoint(pos):
+            print(self.returnValue)
+            print("Jeg ble ikke trykket")
+            
             return False
         
         print("Jeg ble trykket")

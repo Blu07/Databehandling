@@ -62,15 +62,13 @@ class Menu():
         
     def handle_events(self, events):
         
-        metadata = {}
-        
         for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for button in self.buttonsSoner:
+                for button in self.buttons:
                     returnValue = button.click(pygame.mouse.get_pos())
                     if returnValue == "soner":          
                         print("soner ble trykket, setter rom til false")                  
@@ -81,9 +79,18 @@ class Menu():
                         self.show_soner_button.update(False)
                 
                 
+                if self.show_rom_button.active:
+                    for Button in self.buttonsRoms:
+                        Button.click(pygame.mouse.get_pos())
+                            
+                if self.show_soner_button.active:
+                    for Button in self.buttonsSoner:
+                        Button.click(pygame.mouse.get_pos())
+
+                
+                
         self.slider.drag_slider()
-        
-        return metadata
+    
     
     def draw(self, screen):
         screen.fill((200, 200, 200))
