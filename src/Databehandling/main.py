@@ -2,14 +2,14 @@
 
 import pygame as pg
 from states import Menu
-from settings import *
+from settings import WINDOW_HEIGHT, WINDOW_WIDTH, FPS
 
 
 class App:
     def __init__(self):
         pg.init()
         pg.display.set_caption('Databehandling')
-        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
+        self.screen = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.clock = pg.time.Clock()
         self.state = Menu()
 

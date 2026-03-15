@@ -1,25 +1,40 @@
 # utils.py
 
-import pygame as pg
-import sys
-import threading
-import matplotlib.pyplot as plt
-from utilities import Button, returnData, returnAar,returnAntRom, returnSoner
-from settings import colors
-from utilities import Slider
-import matplotlib.pyplot as plt
-from plot.linje import plotLinje
 
-import multiprocessing
+import pygame
+import matplotlib
+import matplotlib.backends.backend_agg as agg
+import pylab
+
+import sys
+
+from plot.linje import plot_to_figure
+from utilities import Button, returnData, returnAar,returnAntRom, returnSoner
+from settings import PLOT_POS, colors, PLOT_WIDTH_INCHES, PLOT_HEIGHT_INCHES, DPI
+from utilities import Slider
+
+# from plot.linje import plotLinje, plotter
+
+# import threading
+# import multiprocessing
 
 class Menu():
     """ Menu
     """
     def __init__(self):
-        self.axis_title = True
-        self.legend = True
-        self.average = True
-        self.grid = True
+        self.plot = None
+        
+        self.show_axis_labels_button = Button(( 50,  50),  "Aksetitler", colors["Black"], 24, "Arial", (110, 110), colors["Blue"], "axis_title", True, True, self)
+        self.show_legend_button = Button(( 50, 175), "Legend", colors["Black"], 24, "Arial", (110, 110), colors["Blue"], "legend", True, True, self)
+        self.show_average_button = Button(( 50, 300), "Gjennomsnitt", colors["Black"], 24, "Arial", (110, 110), colors["Blue"], "average", True, True, self)
+        self.show_grid_button = Button(( 50, 425), "Grid", colors["Black"], 24, "Arial", (110, 110), colors["Blue"], "grid", True, True, self)
+        self.show_y_lim_button = Button(( 50, 550), "Y-lim", colors["Black"], 24, "Arial", (110, 110), colors["Blue"], "ylim", True, True, self)
+        self.show_rom_button = Button((300,  50), "Antal Rom", colors["Black"], 24, "Arial", (110, 110), colors["Red"], "rom", True, False, self, False)
+        self.show_soner_button = Button((450,  50), "Soner", colors["Black"], 24, "Arial", (110, 110), colors["Red"], "soner", True, False, self, False)
+
+        self.show_legend = True
+        self.show_average = True
+        self.show_grid = True
 
         self.showRom = False
         self.showSoner = False
@@ -27,67 +42,62 @@ class Menu():
         self.dataPath = "data/leieMonde.json"
 
         self.buttons = [
-            Button((100, 50), "Aksetitler", colors["Black"], 24, None, (110, 110), colors["Blue"], "axis_title", True),
-            Button((100, 175), "Legend", colors["Black"], 24, None, (110, 110), colors["Blue"], "legend", True),
-            Button((100, 300), "Gjennomsnitt", colors["Black"], 24, None, (110, 110), colors["Blue"], "average", True),
-            Button((100, 425), "Grid", colors["Black"], 24, None, (110, 110), colors["Blue"], "grid", True),
-            Button((300, 50), "Antal Rom", colors["Black"], 24, None, (110, 110), colors["Red"], "rom", True, False),
-            Button((300, 175), "Soner", colors["Black"], 24, None, (110, 110), colors["Red"], "soner", True, False),
-            Button((650, 425), "Plott", colors["Black"], 24, None, (250, 110), colors["Green"], "plot", False)
+            self.show_average_button,
+            self.show_axis_labels_button,
+            self.show_legend_button,
+            self.show_grid_button,
+            self.show_y_lim_button,
+            self.show_rom_button,
+            self.show_soner_button
         ]
 
-        self.buttonsRoms= self.Selctor((500,50),(500,300),(110,110), returnAntRom(self.dataPath))
-        self.buttonsSoner= self.Selctor((500,50),(500,300),(110,110), returnSoner(self.dataPath))
+        self.buttonsRoms = self.Selctor((300,210),(500,300),(110,110), returnAntRom(self.dataPath))
+        self.buttonsSoner = self.Selctor((450,210),(500,300),(110,110), returnSoner(self.dataPath))
 
 
-        self.slider = Slider(300, 20, 300, 450, colors["Red"], returnAar(self.dataPath))
+        self.slider = Slider(300, 20, 600, 95, colors["Red"], returnAar(self.dataPath))
+        
+        self.create_plot()
 
+        
     def handle_events(self, events):
+        
+        metadata = {}
+        
         for event in events:
-            if event.type == pg.QUIT:
-                pg.quit()
+            if event.type == pygame.QUIT:
+                pygame.quit()
                 sys.exit()
 
-            if event.type == pg.MOUSEBUTTONDOWN:
-                if self.showRom:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.show_rom_button.active:
                     for button in self.buttonsRoms:
-                        button.click(pg.mouse.get_pos())
-                elif self.showSoner:
+                        button.click(pygame.mouse.get_pos())
+                elif self.show_soner_button.active:
                     for button in self.buttonsSoner:
-                        button.click(pg.mouse.get_pos())
+                        button.click(pygame.mouse.get_pos())
 
                 for button in self.buttons:
-                    if button.click(pg.mouse.get_pos()):
-                        if button.returnValue == "axis_title":
-                            self.axis_title = not self.axis_title
-                            print(self.axis_title)
-                        elif button.returnValue == "legend":
-                            self.legend = not self.legend
-                            print(self.legend)
-                        elif button.returnValue == "average":
-                            self.average = not self.average
-                            print(self.average)
-                        elif button.returnValue == "grid":
-                            self.grid = not self.grid
-                            print(self.grid)
-                        elif button.returnValue == "rom":
-                            self.showRom = not self.showRom
-                        elif button.returnValue == "soner":
-                            self.showSoner = not self.showSoner
-                        elif button.returnValue == "plot":
-                            self.plot(self.axis_title, self.legend, self.average, self.grid)
+                    button.click(pygame.mouse.get_pos())
+                
         self.slider.drag_slider()
+        
+        return metadata
     
     def draw(self, screen):
         screen.fill((200, 200, 200))
-        # pg.draw.rect(screen,colors["Red"],(500,50,500,300)) # viser hvor knapper kommer
+        
+        
+        if self.plot:
+            screen.blit(self.plot, PLOT_POS)
+            
         for button in self.buttons:
             button.draw(screen)
 
-        if self.showRom:
+        if self.show_rom_button.active:
             for Button in self.buttonsRoms:
                 Button.draw(screen) 
-        elif self.showSoner:
+        elif self.show_soner_button.active:
             for Button in self.buttonsSoner:
                 Button.draw(screen) 
 
@@ -108,15 +118,18 @@ class Menu():
                 y+=1
                 x=0
 
-            button = Button(((120*x+boxPos[0],120*y+boxPos[1])), str(elemwnt), colors["Black"], 24, None, (110,110), colors["Red"],i , True ,False)
+            button = Button(((120*x+boxPos[0],120*y+boxPos[1])), str(elemwnt), colors["Black"], 24, None, (110,110), colors["Red"], i, True, True, self, False)
             arr.append(button)
             x+=1
             i+=1
         return arr
-            
+    
 
-    def plot(self, axis_title, legend, average, grid):
+    def create_plot(self):
+                
+        matplotlib.use("Agg")
 
+        # Create the data array
         data = returnData(self.dataPath)
         plotData = []
 
@@ -128,14 +141,29 @@ class Menu():
                         temp.append(data[buttonRom.returnValue][buttonSoner.returnValue])
                 plotData.append(temp)
         
-        # print(plotData)
 
-        p = multiprocessing.Process(target=plotLinje, args=(plotData,returnAar(self.dataPath)))
-        p.daemon = True
-        p.start()
-        # t = threading.Thread(target=plotLinje,name="ploting",args=((plotData,returnAar(self.dataPath))))
-        # t.daemon = True # Gjøre at den nye treaden vil avslutte når hoved treaden avsluter
-        # t.start()
+        fig = pylab.figure(figsize=[PLOT_WIDTH_INCHES, PLOT_HEIGHT_INCHES], dpi=DPI)
         
+        plot_to_figure(
+            fig=fig,
+            data=plotData,
+            aar=returnAar(self.dataPath),
+            show_legend=self.show_legend_button.active,
+            show_grid=self.show_grid_button.active,
+            show_axis_labels=self.show_axis_labels_button.active,
+            y_lim_zero=self.show_y_lim_button.active,
+            show_average=self.show_average_button.active,
+            title="Leiepris gitt antall rom, områder og år",
+            x_label="År",
+            y_label="Leiepris"
+        )
 
-        # print("plotting graph", returnData(self.dataPath))
+        canvas = agg.FigureCanvasAgg(fig)
+        canvas.draw()
+        renderer = canvas.get_renderer()
+        raw_data = renderer.tostring_argb()
+        size = canvas.get_width_height()
+
+        surf = pygame.image.fromstring(raw_data, size, "ARGB")
+        self.plot = surf
+        
