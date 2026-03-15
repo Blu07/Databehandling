@@ -1,5 +1,5 @@
 import pygame as pg
-from settings import colors
+from settings import COLORS
 
 class Slider:
     def __init__(self, width, height, x, y, box_col, options=list):
@@ -30,4 +30,4 @@ class Slider:
 
     def draw(self, screen):
         pg.draw.rect(screen, self.box_col, self.rect(0))
-        pg.draw.circle(screen, colors["White"], (self.circle_x, self.circle_y), self.radius)
+        pg.draw.circle(screen, COLORS["White"], (self.circle_x, self.circle_y), self.radius)

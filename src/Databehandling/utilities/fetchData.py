@@ -16,7 +16,7 @@ def opneFile(path):
         f.close
     return data
 
-def returnData(path):
+def returnData(path = "data/leieMonde.json"):
     """_summary_
 
     Args:
@@ -43,7 +43,7 @@ def returnData(path):
     return ney
 
 
-def returnAar(path):
+def returnAar(path = "data/leieMonde.json"):
     """_summary_
 
     Args:
@@ -60,7 +60,7 @@ def returnAar(path):
     # print(arr)
     return arr
         
-def returnAntRom(path):
+def returnAntRom(path = "data/leieMonde.json"):
     """_summary_
 
     Args:
@@ -76,7 +76,7 @@ def returnAntRom(path):
     # print(arr)
     return arr
 
-def returnSoner(path):
+def returnSoner(path = "data/leieMonde.json"):
     """_summary_
 
     Args:

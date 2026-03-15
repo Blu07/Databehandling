@@ -2,7 +2,7 @@ import pygame as pg
 import settings as cf
 
 class Text:
-    def __init__(self, pos:list,text:str, font:str=None ,fontSize:int=45, fontColor:tuple=cf.colors["White"]):
+    def __init__(self, pos:list,text:str, font:str=None ,fontSize:int=45, fontColor:tuple=cf.COLORS["White"]):
         """Lager et tekst objekt
 
         Args:

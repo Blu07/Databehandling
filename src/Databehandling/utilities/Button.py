@@ -1,5 +1,5 @@
 import pygame
-from settings import colors
+from settings import COLORS
 
 
 pygame.font.init()
@@ -9,12 +9,12 @@ def returnTextWithLine(self, InText:str):
         self (list): classe
         text (str): txt som skal opp deles.
         """
+        
         text = list(InText.split())
         new = []
         i = 0
         while i  < len(text):
             try: 
-                # print(new[-1],"::" , text[i])
                 int(new[-1][-1])
                 int(text[i][0])
                 new.append(str(new[-1])+ " "+ str(text[i]))
@@ -23,7 +23,7 @@ def returnTextWithLine(self, InText:str):
             except:
                 new.append(text[i])
                 i+=1
-        # new.append(text[-1])
+
         text = new
         print(text)
         arrTextSize = []
@@ -42,7 +42,7 @@ def returnTextWithLine(self, InText:str):
             else:
                 new.append(text[i+1])
                 y+=1
-        # print(new)
+
 
         return new
 
@@ -76,13 +76,6 @@ class Button:
         
         self.text = returnTextWithLine(self,text) 
 
-        
-        # if buttonsize == True: 
-        #     text_width, text_height = self.font.size(self.text)
-        #     self.buttonsize = [round(text_width,-1)+50,round(text_height,-1)+10]
-        # else:
-        #     self.buttonsize = list(buttonsize)
-        # print(self.buttonsize)
         self.buttonColer = buttonCooler
         
         
@@ -105,25 +98,18 @@ class Button:
             _type_: retuner ennten en retuner verdi eller True når knappen blir trykt
         """
         
-        print("Hei")
 
+        # Sjekker om musen er over knappen  
         if not self.rect().collidepoint(pos):
-            print(self.returnValue)
-            print("Jeg ble ikke trykket")
-            
             return False
-        
-        print("Jeg ble trykket")
         
         
         # Ikke gjør toggle mekanikk
         if not self.toggle:
             return self.returnValue
         
-        
-        # bytt state på knappen og deretter fargen som tilsvarer den nye staten
-        self.active = not self.active
-        self.buttonColer = colors["Blue"] if self.active else colors["Red"]
+        # Toggle state
+        self.update(not self.active)
 
         # Tegn plott med den nye staten hvis den er satt til det
         if self.draw_plot_on_toggle:
@@ -138,30 +124,10 @@ class Button:
 
     
     def update(self, set_active:bool):
-        print("oppdaterer knappen til", set_active, "ny farge:", colors["Blue"] if set_active else colors["Red"])
         self.active = set_active
-        self.buttonColer = colors["Blue"] if self.active else colors["Red"]
+        self.buttonColer = COLORS["Blue"] if self.active else COLORS["Red"]
         
 
-
-
-    # def draw(self, surface,offset=[0,0]):
-    #     """_summary_
-
-    #     Args:
-    #         surface (pygame display): hvilken surface som skal bli tegnet po
-    #         offset (list, optional): en offset på hvor knappe skal bli tegnet. Defaults to [0,0].
-    #     """
-    #     button = pygame.Surface((self.buttonsize[0],self.buttonsize[1]), pygame.SRCALPHA, 32).convert_alpha()
-    #     button.fill(self.buttonColer)
-    #     textimg = self.font.render(self.text, True, self.textCooler)
-        
-    #     text_width, text_height = self.font.size(self.text)
-    #     # rect = self.rect()
-    #     center_x =  (self.buttonsize[0]-text_width)/2
-    #     center_y =  (self.buttonsize[1]-text_height)/2
-    #     button.blit(textimg,(center_x, center_y))
-    #     surface.blit(button,(self.pos[0] + offset[0], self.pos[1]+ offset[1]))
 
     def draw(self,surface, offset=[0,0]):
         """_summary_
@@ -184,25 +150,3 @@ class Button:
             button.blit(textimg,(center_x, y))
             y +=  text_height
         surface.blit(button,(self.pos[0] + offset[0], self.pos[1]+ offset[1]))
-
-
-class ButtonFunk(Button):
-        def __init__(self, pos, funk, text="none", textCooler=(0, 0, 0), fontSize=11, font="Arial", buttonsize=True, buttonCooler=(255, 255, 255)):
-            super().__init__(pos, text, textCooler, fontSize, font, buttonsize)
-            self.funk = funk
-            self.buttoncooler = buttonCooler
-           
-        def click_Funk(self, pos):
-            """_summary_
-                utfører en funksjon når knappen blir trykt
-            Args:
-                pos (list:(float, float)): list av mus kordinater
-            """
-            if self.funk == None:
-                print("Error: Det er ikke git en funksjon til knappen")
-                return
-            rect = self.rect()
-            if rect.collidepoint(pos):
-                self.funk()
-
-    

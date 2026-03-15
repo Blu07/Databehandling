@@ -11,10 +11,10 @@ PLOT_POS = (1*DPI, 1*DPI)
 PLOT_WIDTH, PLOT_HEIGHT = PLOT_WIDTH_INCHES * DPI, PLOT_HEIGHT_INCHES * DPI
 
 FPS = 60
-colors = {
-    "Black": (0, 0, 0),
-    "White": (255, 255, 255),
-    "Green": (37, 255, 0),
-    "Red": (255, 30, 30),
-    "Blue": (0, 162, 255)
+COLORS = {
+    "Black": (0, 0, 0, 255),
+    "White": (255, 255, 255, 255),
+    "Green": (37, 255, 0, 255),
+    "Red": (255, 30, 30, 255),
+    "Blue": (0, 162, 255, 255)
 }

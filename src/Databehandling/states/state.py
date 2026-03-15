@@ -10,7 +10,7 @@ import sys
 
 from plot.linje import plot_to_figure
 from utilities import Button, returnData, returnAar,returnAntRom, returnSoner
-from settings import PLOT_POS, colors, PLOT_WIDTH_INCHES, PLOT_HEIGHT_INCHES, DPI
+from settings import PLOT_POS, COLORS, PLOT_WIDTH_INCHES, PLOT_HEIGHT_INCHES, DPI
 from utilities import Slider
 
 # from plot.linje import plotLinje, plotter
@@ -24,22 +24,13 @@ class Menu():
     def __init__(self):
         self.plot = None
         
-        self.show_axis_labels_button = Button(( 50,  50),  "Aksetitler", colors["Black"], 24, "Arial", (110, 110), colors["Blue"], "axis_title", True, True, self)
-        self.show_legend_button = Button(( 50, 175), "Legend", colors["Black"], 24, "Arial", (110, 110), colors["Blue"], "legend", True, True, self)
-        self.show_average_button = Button(( 50, 300), "Gjennomsnitt", colors["Black"], 24, "Arial", (110, 110), colors["Blue"], "average", True, True, self)
-        self.show_grid_button = Button(( 50, 425), "Grid", colors["Black"], 24, "Arial", (110, 110), colors["Blue"], "grid", True, True, self)
-        self.show_y_lim_button = Button(( 50, 550), "Y-lim", colors["Black"], 24, "Arial", (110, 110), colors["Blue"], "ylim", True, True, self)
-        self.show_rom_button = Button((300,  50), "Antal Rom", colors["Black"], 24, "Arial", (110, 110), colors["Red"], "rom", True, False, self, False)
-        self.show_soner_button = Button((450,  50), "Soner", colors["Black"], 24, "Arial", (110, 110), colors["Red"], "soner", True, False, self, False)
-
-        self.show_legend = True
-        self.show_average = True
-        self.show_grid = True
-
-        self.showRom = False
-        self.showSoner = False
-
-        self.dataPath = "data/leieMonde.json"
+        self.show_axis_labels_button = Button(( 50,  50),  "Aksetitler", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "axis_title", True, True, self)
+        self.show_legend_button = Button(( 50, 175), "Legend", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "legend", True, True, self)
+        self.show_average_button = Button(( 50, 300), "Gjennomsnitt", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "average", True, True, self)
+        self.show_grid_button = Button(( 50, 425), "Grid", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "grid", True, True, self)
+        self.show_y_lim_button = Button(( 50, 550), "Y-lim", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "ylim", True, True, self)
+        self.show_rom_button = Button((300,  50), "Antal Rom", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Red"], "rom", True, False, self, False)
+        self.show_soner_button = Button((450,  50), "Soner", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Red"], "soner", True, False, self, False)
 
         self.buttons = [
             self.show_average_button,
@@ -51,11 +42,11 @@ class Menu():
             self.show_soner_button
         ]
 
-        self.buttonsRoms = self.Selctor((300,210), (500,300), (110,110), 5, returnAntRom(self.dataPath))
-        self.buttonsSoner = self.Selctor((450,210), (500,300), (110,110), 5, returnSoner(self.dataPath))
+        self.buttonsRoms = self.Selctor((300,210), (500,300), (110,110), 5, returnAntRom())
+        self.buttonsSoner = self.Selctor((450,210), (500,300), (110,110), 5, returnSoner())
 
 
-        self.slider = Slider(300, 20, 600, 95, colors["Red"], returnAar(self.dataPath))
+        self.slider = Slider(300, 20, 600, 95, COLORS["Red"], returnAar())
         
         self.create_plot()
 
@@ -70,11 +61,9 @@ class Menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.buttons:
                     returnValue = button.click(pygame.mouse.get_pos())
-                    if returnValue == "soner":          
-                        print("soner ble trykket, setter rom til false")                  
+                    if returnValue == "soner":                          
                         self.show_rom_button.update(False)
-                        print("satt rom til false")                  
-                        
+         
                     if returnValue == "rom":
                         self.show_soner_button.update(False)
                 
@@ -127,7 +116,7 @@ class Menu():
                 y+=1
                 x=0
 
-            button = Button((((buttnSize[0]+padding)*x+boxPos[0],(buttnSize[1]+padding)*y+boxPos[1])), str(elemwnt), colors["Black"], 24, None, buttnSize, colors["Red"], i, True, True, self, False)
+            button = Button((((buttnSize[0]+padding)*x+boxPos[0],(buttnSize[1]+padding)*y+boxPos[1])), str(elemwnt), COLORS["Black"], 24, None, buttnSize, COLORS["Red"], i, True, True, self, False)
             arr.append(button)
             x+=1
             i+=1
@@ -139,16 +128,26 @@ class Menu():
         matplotlib.use("Agg")
 
         # Create the data array
-        data = returnData(self.dataPath)
+        data = returnData()
         plotData = []
+        
+        rom_soner_index = []
+        antRom = returnAntRom()
+        sone = returnSoner()
 
         for buttonRom in self.buttonsRoms:
             if buttonRom.active:
                 temp = []
                 for buttonSoner in self.buttonsSoner:
                     if buttonSoner.active:
+                        rom = antRom[buttonRom.returnValue]
+                        soner = sone[buttonSoner.returnValue]
+                        
+                        rom_soner_index.append(f"{rom}, {soner}")
                         temp.append(data[buttonRom.returnValue][buttonSoner.returnValue])
                 plotData.append(temp)
+                
+        print("plotData:", plotData, "rom_soner_index:", rom_soner_index)
         
 
         fig = pylab.figure(figsize=[PLOT_WIDTH_INCHES, PLOT_HEIGHT_INCHES], dpi=DPI)
@@ -156,7 +155,8 @@ class Menu():
         plot_to_figure(
             fig=fig,
             data=plotData,
-            aar=returnAar(self.dataPath),
+            rom_soner_index=rom_soner_index,
+            aar=returnAar(),
             show_legend=self.show_legend_button.active,
             show_grid=self.show_grid_button.active,
             show_axis_labels=self.show_axis_labels_button.active,
