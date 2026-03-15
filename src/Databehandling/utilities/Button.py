@@ -6,18 +6,18 @@ pygame.font.init()
 
 
 class Button:
-    def __init__(self,pos,text="none",textCooler=(0,0,0), fontSize = 11, font="Arial" , buttonsize=(100, 100), buttonCooler = (0, 0, 0), returnValue=True, toggle=True, active=True):
+    def __init__(self,pos,text="none",textCooler=(0,0,0), fontSize = 11, font="Arial" , buttonsize=(100, 100), buttonCooler = (0, 0, 0), returnValue:str="", toggle=True, draw_plot_on_toggle=True, state_ref=None, active=True):
         """_summary_
             for å lagge en knap som returner
         Args:
             pos (list): kordinater til knapen
-            text (str, optional): Hva som skal sto po kanpen. Defaults to "none".
+            text (str, optional): Hva som skal sto po knapen. Defaults to "none".
             textCooler (tuple, optional): farge po teksten. Defaults to (0,0,0).
             fontSize (int, optional): storelse po teksten. Defaults to 11.
             font (str, optional): hvilken type font po texten. Defaults to "Arial".
             buttonsize (tuple, optional): dimisionen po kanppen. Defaults to 100x100 px.
             buttonCooler (tuple, optional): farge po knapen. Defaults to (255,255,255).
-            returnValue (bool, optional): hvilken verdi den returner. Defaults to True.
+            returnValue (str, optional): hvilken verdi den returner. Defaults to "".
         """
         self.pos = list(pos)
         
@@ -26,6 +26,8 @@ class Button:
         self.fontSize = fontSize
         self.font = pygame.font.SysFont(font, fontSize)
         self.toggle = toggle
+        self.draw_plot_on_toggle = draw_plot_on_toggle
+        self.state_ref = state_ref
         self.active = active
 
         self.buttonsize = buttonsize
@@ -64,6 +66,7 @@ class Button:
         """
         rect = self.rect()
         if rect.collidepoint(pos):
+            
             # return True
             if self.toggle and self.active:
                 self.active = False
@@ -71,7 +74,15 @@ class Button:
             elif self.toggle:
                 self.active = True
                 self.buttonColer = colors["Blue"]
+            
+            if self.draw_plot_on_toggle:
+                if self.state_ref != None:
+                    self.state_ref.create_plot()
+                else:
+                    print("Error: Det er ikke gitt en state referanse til knappen, så den kan ikke tegne plot")
 
+            print("Toggeled", self.returnValue)
+            
             return self.returnValue
         return False
     
