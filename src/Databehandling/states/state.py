@@ -27,10 +27,13 @@ class Menu():
         self.show_axis_labels_button = Button(( 50,  50),  "Aksetitler", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "axis_title", True, True, self)
         self.show_legend_button = Button(( 50, 175), "Legend", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "legend", True, True, self)
         self.show_average_button = Button(( 50, 300), "Gjennomsnitt", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "average", True, True, self)
-        self.show_grid_button = Button(( 50, 425), "Grid", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "grid", True, True, self)
-        self.show_y_lim_button = Button(( 50, 550), "Y-lim", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "ylim", True, True, self)
+        self.show_inflation_button = Button(( 50, 425), "Inflasjon", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "inflasjon", True, True, self)
+        self.show_grid_button = Button(( 50, 550), "Grid", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "grid", True, True, self)
+        self.show_y_lim_button = Button(( 50, 675), "y-lim 0", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "ylim", True, True, self)
+        
         self.show_rom_button = Button((300,  50), "Antal Rom", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Red"], "rom", True, False, self, False)
         self.show_soner_button = Button((450,  50), "Soner", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Red"], "soner", True, False, self, False)
+        
 
         self.buttons = [
             self.show_average_button,
@@ -38,6 +41,7 @@ class Menu():
             self.show_legend_button,
             self.show_grid_button,
             self.show_y_lim_button,
+            self.show_inflation_button,
             self.show_rom_button,
             self.show_soner_button
         ]
@@ -76,7 +80,7 @@ class Menu():
                     for Button in self.buttonsSoner:
                         Button.click(pygame.mouse.get_pos())
 
-                
+        
                 
         self.slider.drag_slider()
     
@@ -147,8 +151,6 @@ class Menu():
                         temp.append(data[buttonRom.returnValue][buttonSoner.returnValue])
                 plotData.append(temp)
                 
-        print("plotData:", plotData, "rom_soner_index:", rom_soner_index)
-        
 
         fig = pylab.figure(figsize=[PLOT_WIDTH_INCHES, PLOT_HEIGHT_INCHES], dpi=DPI)
         
@@ -161,8 +163,9 @@ class Menu():
             show_grid=self.show_grid_button.active,
             show_axis_labels=self.show_axis_labels_button.active,
             y_lim_zero=self.show_y_lim_button.active,
+            show_inflation=self.show_inflation_button.active,
             show_average=self.show_average_button.active,
-            title="Leiepris gitt antall rom, områder og år",
+            title="Leiepris gitt antall rom, områder og år.",
             x_label="År",
             y_label="Leiepris"
         )

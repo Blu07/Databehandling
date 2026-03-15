@@ -25,20 +25,20 @@ def returnTextWithLine(self, InText:str):
                 i+=1
 
         text = new
-        print(text)
+
         arrTextSize = []
         for tex in text:
             arrTextSize.append(self.font.size(tex))
-        print(arrTextSize)
+
 
         new = [text[0]]
         y = 0
         for i in range(len(arrTextSize)-1):
-            print(new)
+
             if self.font.size(new[y])[0] + arrTextSize[i+1][0] < self.buttonsize[0]-5:
 
                     new[y] = (str(new[y])+ " "+ str(text[i+1]))
-                    print(new[y])
+
             else:
                 new.append(text[i+1])
                 y+=1
@@ -117,8 +117,6 @@ class Button:
                 self.state_ref.create_plot()
             else:
                 print("Error: Det er ikke gitt en state referanse til knappen, så den kan ikke tegne plot")
-
-        print("knappen sier:", self.returnValue)
         
         return self.returnValue
 
