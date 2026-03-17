@@ -1,5 +1,5 @@
 import pygame
-from settings import COLORS
+from settings import COLORS, BUTTONSIZE
 
 
 pygame.font.init()
@@ -50,9 +50,9 @@ def returnTextWithLine(self, InText:str):
 
 
 class Button:
-    def __init__(self,pos,text="none",textCooler=COLORS["Black"], fontSize = 18, font="Arial" , buttonsize=(110, 110), returnValue=None, toggle=True, draw_plot_on_toggle=True, state_ref=None, active=True):
-        """_summary_
-            for å lagge en knap som returner
+    def __init__(self,pos,text="none",textCooler=COLORS["Black"], fontSize = 18, font="Arial" , buttonsize=BUTTONSIZE, returnValue=None, toggle=True, draw_plot_on_toggle=True, state_ref=None, active=True):
+        """
+            For å lagge en knap som returner
         Args:
             pos (list): kordinater til knapen
             text (str, optional): Hva som skal sto po knapen. Defaults to "none".
@@ -83,7 +83,7 @@ class Button:
         
     
     def rect(self):
-        """_summary_
+        """Returner en pygame rect objeket
 
         Returns:
             pygame rect: return rectangl values for the button
@@ -91,7 +91,7 @@ class Button:
         return  pygame.Rect(self.pos[0],self.pos[1],self.buttonsize[0],self.buttonsize[1])
     
     def click(self, pos):
-        """_summary_
+        """SJekker om knappen er kliket
 
         Args:
             pos (list:(float, float)): list av mus kordinater
@@ -124,13 +124,18 @@ class Button:
 
     
     def update(self, set_active:bool):
+        """KJekker om kanpen skal være aktive
+
+        Args:
+            set_active (bool): Sjekker hva som er aktive
+        """
         self.active = set_active
         self.buttonColer = COLORS["Blue"] if self.active else COLORS["Red"]
         
 
 
     def draw(self,surface, offset=[0,0]):
-        """_summary_
+        """Tegner knappen
 
         Args:
             surface (pygame display): hvilken surface som skal bli tegnet po

@@ -19,4 +19,5 @@ COLORS = {
     "Blue": (0, 162, 255, 255)
 }
 
-Budeurfie = 0
+# Defult verdier
+BUTTONSIZE = (110,110)

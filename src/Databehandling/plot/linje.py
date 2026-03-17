@@ -6,8 +6,8 @@ from settings import COLORS
 
 def plot_to_figure(
     fig,
-    data,
-    aar,
+    data:list,
+    aar:list,
     rom_soner_index,
     show_legend: bool = False,
     show_grid: bool = True,
@@ -19,6 +19,23 @@ def plot_to_figure(
     x_label: str = "X-axis",
     y_label: str = "Y-axis"
 ):
+    """_summary_
+
+    Args:
+        fig (_type_): _description_
+        data (_type_): _description_
+        aar (_type_): _description_
+        rom_soner_index (_type_): _description_
+        show_legend (bool, optional): _description_. Defaults to False.
+        show_grid (bool, optional): _description_. Defaults to True.
+        show_axis_labels (bool, optional): _description_. Defaults to True.
+        show_average (bool, optional): _description_. Defaults to False.
+        y_lim_zero (bool, optional): _description_. Defaults to False.
+        show_inflation (bool, optional): _description_. Defaults to False.
+        title (str, optional): _description_. Defaults to "Plot".
+        x_label (str, optional): _description_. Defaults to "X-axis".
+        y_label (str, optional): _description_. Defaults to "Y-axis".
+    """
 
     # Sett None til np.nan
     for rom in range(len(data)):
