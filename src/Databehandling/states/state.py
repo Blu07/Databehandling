@@ -124,7 +124,7 @@ class Menu():
                 
         matplotlib.use("Agg")
 
-        # Create the data array
+        # Create the data array and filter
         data = returnData()
         plotData = []
         
@@ -149,7 +149,7 @@ class Menu():
         plot_to_figure(
             fig=fig,
             data=plotData,
-            rom_soner_index=rom_soner_index,
+            rom_soner_legend=rom_soner_index,
             aar=returnAar(),
             show_legend=self.show_legend_button.active,
             show_grid=self.show_grid_button.active,

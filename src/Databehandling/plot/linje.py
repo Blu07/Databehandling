@@ -2,13 +2,12 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from settings import COLORS
 
 def plot_to_figure(
     fig,
     data:list,
     aar:list,
-    rom_soner_index,
+    rom_soner_legend:list[str],
     show_legend: bool = False,
     show_grid: bool = True,
     show_axis_labels: bool = True,
@@ -22,19 +21,19 @@ def plot_to_figure(
     """_summary_
 
     Args:
-        fig (_type_): _description_
-        data (_type_): _description_
-        aar (_type_): _description_
-        rom_soner_index (_type_): _description_
-        show_legend (bool, optional): _description_. Defaults to False.
-        show_grid (bool, optional): _description_. Defaults to True.
-        show_axis_labels (bool, optional): _description_. Defaults to True.
-        show_average (bool, optional): _description_. Defaults to False.
-        y_lim_zero (bool, optional): _description_. Defaults to False.
-        show_inflation (bool, optional): _description_. Defaults to False.
-        title (str, optional): _description_. Defaults to "Plot".
-        x_label (str, optional): _description_. Defaults to "X-axis".
-        y_label (str, optional): _description_. Defaults to "Y-axis".
+        fig (_type_): Ploting figuren
+        data (_type_): Listen med filtrert data som skal plotest
+        aar (_type_): år hvilken år
+        rom_soner_legend (_type_): list med legend 
+        show_legend (bool, optional): Viser legend. Defaults to False.
+        show_grid (bool, optional): Viser gride. Defaults to True.
+        show_axis_labels (bool, optional): Viser akse titel. Defaults to True.
+        show_average (bool, optional): Viser gjennomsnitt. Defaults to False.
+        y_lim_zero (bool, optional): Setter y lim. Defaults to False.
+        show_inflation (bool, optional): Viser inflation. Defaults to False.
+        title (str, optional): Titel på ploten. Defaults to "Plot".
+        x_label (str, optional): Navn på x aksen. Defaults to "X-axis".
+        y_label (str, optional): Navn på y aksen. Defaults to "Y-axis".
     """
 
     # Sett None til np.nan
@@ -64,7 +63,7 @@ def plot_to_figure(
             
             use_index = rom_sone_i % len(colors)
                    
-            ax.plot(aar, sone, ".-", color=colors[use_index], label=f"{rom_soner_index[rom_sone_i]}")
+            ax.plot(aar, sone, ".-", color=colors[use_index], label=f"{rom_soner_legend[rom_sone_i]}")
 
             if show_average:
                 # Legg til linje for gjennomsnitt
@@ -89,4 +88,3 @@ def plot_to_figure(
     if y_lim_zero: plt.ylim(bottom=0)
     
     plt.title(title)
-    
