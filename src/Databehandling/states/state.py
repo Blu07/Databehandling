@@ -1,5 +1,3 @@
-# utils.py
-
 
 import pygame
 import matplotlib
@@ -13,10 +11,6 @@ from utilities import Button, returnData, returnAar,returnAntRom, returnSoner
 from settings import PLOT_POS, COLORS, PLOT_WIDTH_INCHES, PLOT_HEIGHT_INCHES, DPI
 from utilities import Slider
 
-# from plot.linje import plotLinje, plotter
-
-# import threading
-# import multiprocessing
 
 class Menu():
     """ Menu
@@ -24,16 +18,15 @@ class Menu():
     def __init__(self):
         self.plot = None
         
-        self.show_axis_labels_button = Button(( 50,  50),  "Aksetitler", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "axis_title", True, True, self)
-        self.show_legend_button = Button(( 50, 175), "Legend", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "legend", True, True, self)
-        self.show_average_button = Button(( 50, 300), "Gjennomsnitt", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "average", True, True, self)
-        self.show_inflation_button = Button(( 50, 425), "Inflasjon", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "inflasjon", True, True, self)
-        self.show_grid_button = Button(( 50, 550), "Grid", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "grid", True, True, self)
-        self.show_y_lim_button = Button(( 50, 675), "y-lim 0", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Blue"], "ylim", True, True, self)
+        self.show_axis_labels_button = Button(( 50,  50),  "Aksetitler", returnValue="axis_title", state_ref=self, active=False)
+        self.show_legend_button = Button(( 50, 175), "Legend", returnValue="legend", state_ref=self)
+        self.show_average_button = Button(( 50, 300), "Gjennomsnitt", returnValue="average", state_ref=self, active=False)
+        self.show_inflation_button = Button(( 50, 425), "Inflasjon", returnValue="inflasjon", state_ref=self, active=False)
+        self.show_grid_button = Button(( 50, 550), "Grid", returnValue="grid", state_ref=self)
+        self.show_y_lim_button = Button(( 50, 675), "y-lim 0", returnValue="ylim", state_ref=self)
         
-        self.show_rom_button = Button((300,  50), "Antal Rom", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Red"], "rom", True, False, self, False)
-        self.show_soner_button = Button((450,  50), "Soner", COLORS["Black"], 24, "Arial", (110, 110), COLORS["Red"], "soner", True, False, self, False)
-        
+        self.show_rom_button = Button((300,  50), "Antal Rom", returnValue="rom", draw_plot_on_toggle=False, state_ref=self, active=False)
+        self.show_soner_button = Button((450,  50), "Soner", returnValue="soner", draw_plot_on_toggle=False, state_ref=self, active=False)
 
         self.buttons = [
             self.show_average_button,
@@ -120,7 +113,7 @@ class Menu():
                 y+=1
                 x=0
 
-            button = Button((((buttnSize[0]+padding)*x+boxPos[0],(buttnSize[1]+padding)*y+boxPos[1])), str(elemwnt), COLORS["Black"], 24, None, buttnSize, COLORS["Red"], i, True, True, self, False)
+            button = Button((((buttnSize[0]+padding)*x+boxPos[0],(buttnSize[1]+padding)*y+boxPos[1])), str(elemwnt), returnValue=i, state_ref=self, active=False)
             arr.append(button)
             x+=1
             i+=1
@@ -146,7 +139,6 @@ class Menu():
                     if buttonSoner.active:
                         rom = antRom[buttonRom.returnValue]
                         soner = sone[buttonSoner.returnValue]
-                        
                         rom_soner_index.append(f"{rom}, {soner}")
                         temp.append(data[buttonRom.returnValue][buttonSoner.returnValue])
                 plotData.append(temp)

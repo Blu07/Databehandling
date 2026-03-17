@@ -8,6 +8,8 @@ def returnTextWithLine(self, InText:str):
         """
         self (list): classe
         text (str): txt som skal opp deles.
+        
+        return (list): en list av strenger som er opp delt i flere linjer hvis det ikke får plass på knappen
         """
         
         text = list(InText.split())
@@ -48,7 +50,7 @@ def returnTextWithLine(self, InText:str):
 
 
 class Button:
-    def __init__(self,pos,text="none",textCooler=(0,0,0), fontSize = 11, font="Arial" , buttonsize=(100, 100), buttonCooler = (0, 0, 0), returnValue:str="", toggle=True, draw_plot_on_toggle=True, state_ref=None, active=True):
+    def __init__(self,pos,text="none",textCooler=COLORS["Black"], fontSize = 18, font="Arial" , buttonsize=(110, 110), returnValue=None, toggle=True, draw_plot_on_toggle=True, state_ref=None, active=True):
         """_summary_
             for å lagge en knap som returner
         Args:
@@ -76,7 +78,7 @@ class Button:
         
         self.text = returnTextWithLine(self,text) 
 
-        self.buttonColer = buttonCooler
+        self.buttonColer = COLORS["Blue"] if self.active else COLORS["Red"]
         
         
     

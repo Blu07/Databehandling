@@ -2,7 +2,7 @@ import pygame as pg
 from settings import COLORS
 
 class Slider:
-    def __init__(self, width, height, x, y, box_col, options=list):
+    def __init__(self, width, height, x, y, box_col, options: list[int]):
         self.width = width
         self.height = height
         self.pos_x = x

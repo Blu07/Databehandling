@@ -43,7 +43,7 @@ def returnData(path = "data/leieMonde.json"):
     return ney
 
 
-def returnAar(path = "data/leieMonde.json"):
+def returnAar(path = "data/leieMonde.json") -> list[int]:
     """_summary_
 
     Args:
