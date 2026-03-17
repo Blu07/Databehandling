@@ -33,7 +33,7 @@ class Slider:
             Adding and extra 100 on the y-height for the hitbox so that you can drag even when you are slightly off in y-value
             Also adds a limit so you can't drag the circle outside of the rectangle.
         """
-        if pg.mouse.get_pressed()[0] and self.rect(100).collidepoint(pg.mouse.get_pos()):
+        if pg.mouse.get_pressed()[0] and self.rect(self.radius+5).collidepoint(pg.mouse.get_pos()):
             if pg.mouse.get_pos()[0] >= self.pos_x + self.width:
                 print(self.circle_x)
                 self.circle_x = self.pos_x + self.width

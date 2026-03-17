@@ -101,6 +101,18 @@ class Menu():
         
 
     def Selctor(self,boxPos,boxSize, buttnSize, padding, elements):
+        """_summary_
+
+        Args:
+            boxPos (_type_): Posision for områdeknappen er i
+            boxSize (_type_): stårelsen på område knappen er i
+            buttnSize (_type_): størelse på knappen
+            padding (_type_): mellorom mellom knappen
+            elements (_type_): text på knappen 
+
+        Returns:
+            _type_: _description_
+        """
         anttalKnappIx = boxSize[0]//buttnSize[0]
         anttalKnappIy = boxSize[1]//buttnSize[1] # kan brukes for finn ut om knappen tar for mye plass
         x = 0
