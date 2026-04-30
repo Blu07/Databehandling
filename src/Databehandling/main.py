@@ -25,7 +25,7 @@ class App:
             self.current_state = current_state
             
             if navigation == "start_spill":
-                current_state = GameState()
+                current_state = GameState() # Eksempel
             
             
             if navigation == "quit":
